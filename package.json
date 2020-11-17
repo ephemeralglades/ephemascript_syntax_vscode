@@ -1,0 +1,25 @@
+{
+    "name": "ephemasoftsyntax",
+    "displayName": "ephemasoftsyntax",
+    "description": "Syntax Highlighting for Ephemascript",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.44.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "ephemascript",
+            "aliases": ["Ephemascript", "ephemascript"],
+            "extensions": [".eph", ".txt"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "ephemascript",
+            "scopeName": "text.ephemascript",
+            "path": "./syntaxes/ephemascript.tmLanguage.json"
+        }]
+    }
+}

@@ -1,0 +1,129 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Ephemascript",
+	"patterns": [
+		{
+			"include": "#todo"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#expression"
+		}
+	],
+	"repository": {
+		"todo": {
+			"match": "TODO",
+			"name": "keyword.todo"
+		},
+		"expression": {
+			"patterns": [
+				{
+					"include": "#vardeclaration"
+				},
+				{
+					"include": "#functioncall"
+				},
+				{
+					"include": "#dialogue"
+				}
+			]
+		},
+		"dialogue": {
+			"begin": ".+(\\\\|\\¥)",
+			"end": "$",
+			"beginCaptures": {
+				"0": {
+					"name": "markup.bold"
+				}
+			}
+		},
+		"functioncall": {
+			"begin": "\\@\\S+\\s+",
+			"end": "$",
+			"beginCaptures": {
+				"0": {
+					"patterns": [
+						{
+							"match": "\\@\\w+:",
+							"name": "keyword.control.label"
+						},
+						{
+							"match": "\\@\\w+",
+							"name": "entity.name.function"
+						}
+					]
+				}
+			},
+			"patterns": [
+				{
+					"match": ".+",
+					"captures": {
+						"0": {
+							"name": "variable.parameter"
+						}
+					}
+				}
+			]
+		},
+		"vardeclaration": {
+			"begin": "\\@var\\s+",
+			"end": "$",
+			"patterns": [
+				{
+					"begin": "\\S+",
+					"end": "$",
+					"beginCaptures": {
+						"0": {
+							"name": "variable.name.ephemascript"
+						}
+					},
+					"patterns": [
+						{
+							"match": ".+",
+							"name": "string.other.ephemascript"
+						}
+					]
+				}
+			],
+			"beginCaptures": {
+				"0": {
+					"name": "keyword.other.var.ephemascript"
+				}
+			}
+		},
+		"literals": {
+			"patterns": [
+				{
+					"name": "constant.language.boolean.true.ephemascript",
+					"match": "(?<!\\.)\\btrue\\b"
+				},
+				{
+					"name": "constant.language.boolean.false.ephemascript",
+					"match": "(?<!\\.)\\bfalse\\b"
+				}
+			]
+		},
+		"keywords": {
+			"name": "keyword.control.ephemascript",
+			"match": "\\@(if|else|elseif|endif|goto)\\b"
+		},
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.double-slash.ephemascript",
+					"begin": "//",
+					"end": "$",
+					"patterns": [
+						{"include": "#todo"}
+					]
+				}
+			]
+		}
+	},
+	"scopeName": "text.ephemascript"
+}

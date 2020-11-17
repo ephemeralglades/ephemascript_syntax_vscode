@@ -1,0 +1,281 @@
+@var met no
+// ENUM: hated disliked neutral friendly loved
+@var closeness neutral
+@var bowed false
+@var startedAsChrona false
+// none, lorna, 
+@var task none
+// SWITCH MAGIS AND BOW----------------------------------------------
+@setvar startedAsChrona false
+
+@if isMagi Chrona
+
+	@setvar startedAsChrona true
+
+@else
+
+	@switchMagi Chrona
+
+	Console\ WAIT 0.1
+
+@endif
+
+@FaceEachother
+
+@if var bowed true
+
+	// TODO: make bow animation
+	@playanim Player bow
+
+	Console\ WAIT 2
+
+@endif
+
+// OPENING CONVERSATION---------------------------------------------
+@if var met once
+
+	Haugha\ Hello again, my daughter.
+
+	Chrona\ Hello, Haugha.
+
+	Haugha\ It is customary to bow in my presence, but I shall forgive it.
+	Bow\BOW
+	Don't Bow\AFTERBOW
+
+	@BOW:
+		Chrona\ Oh..
+
+		// TODO: implement playanim
+		@playanim Player bow
+
+		// TODO: implement wait
+		Console\ WAIT 0.5
+
+		@setvar bowed true
+
+		@setvar closeness friendly
+
+	@AFTERBOW:
+	Haugha\ Now then...
+
+	@setvar met twice
+
+@elseif var met no
+
+	@if var startedAsChrona false
+
+		Chrona\ Huh...?
+
+		I've changed back...
+
+	@endif
+
+    ???¥ Oh!
+
+    There you are!
+
+    I’ve been looking all over for you!
+
+	Chrona\ Hello...?
+
+	???\ Don't tell me... You don't remember?
+
+	Disgraceful!
+
+	Behold, the pusher of time, the goddess of all keepers.
+
+	Chrona\ Pusher of time..
+
+	Haugha\ You may call me Haugha.
+
+	Chrona\ My.. Goddess?
+
+	Haugha\ Of course my child. You are mine and mine alone.
+
+	// TODO: make the original necklace broken
+    Oh.. Your necklace! It's broken! Here, let me grant you another one.
+
+	// TODO: implement Godess's Blessing item
+	// TODO: implement "give animation"
+    @GrantItem Goddess's_Blessing 1
+
+    @setvar met once
+
+	Haugha\ (Haugha gives you a strange looking necklace).\.025\itemget
+
+    Chrona¥ ... Thanks.
+
+	Haugha\ Simply hold that necklace to your heart, look deep inside, and you shall always be able to come see me.
+
+	Your goddess will be here always, ready to share her love.
+
+	Chrona\ ...
+
+	Thank you..
+
+	Haugha\ Now..
+
+	Chrona, you must find a seal bearer.
+
+	Chrona\ A seal bearer?
+
+	Haugha\ We Chronokeepers have a legacy.
+
+	"Find one with whom to spend eternity with"
+
+	"and within them succeed the holy throne of time"
+
+	Chrona\ The holy throne of time...
+
+	Haugha\ My daughter, do you accept this mission?
+	Yes\MISSIONACCEPTED
+	No\MISSIONNOTACCEPTED
+
+	@MISSIONACCEPTED:	
+		Chrona\ Yes, I do.
+
+		Haugha\ Wonderful, then let us begin.
+		
+		@goto AFTERMISSION
+
+	@MISSIONNOTACCEPTED:
+		Chrona\ I'm not so sure...
+
+		I am going to refuse for now.
+
+		Haugha\ How shameful!
+		// TODO: Make an angry animation here.
+
+		Console\ WAIT 1
+
+		Haugha\ (Sigh)...
+
+		Very well, if that is your choice.
+
+		In any case, I shall tell you my request.
+
+		Wether you choose to do it or not is of your own selfish volition, I suppose.
+
+		@setvar closeness disliked
+
+		@goto AFTERMISSION
+
+	@AFTERMISSION:
+	Haugha\ Your beloved sister, Lorna. Do you remember her?
+
+	Chrona\ I... Don't think so..
+
+	@setvar task lorna
+
+	@goto TASK
+
+@else
+
+	// FREE LEVELS-------------------------------------------------
+	@if varExt usedHaughaNecklace true
+
+		Haugha\ Ah.. I see you have made use of the necklace.
+
+		It symbolises our creed, be sure to take good care of it.
+
+		@setvarExt usedHaughaNecklace talkedAbout
+
+	@endif
+
+	// TODO: add all the bosses to haugha
+	@if getsFreeLevel true
+
+		Haugha\ My daughter, you have travelled far.
+
+		The souls that echo through the flow of time tell me of your travels.
+
+		They wish to join with you.
+
+		Will you accept them, my daughter?
+		I will\ACCEPTSOULS
+		I will not\DONTACCEPTSOULS
+
+		@ACCEPTSOULS:
+			Chrona\ I heed their call
+
+			Haugha\ Very well, my daughter...
+
+			@runcr grantSoulsAnimation
+
+			Haugha\ May they aid you in your journey for a seal bearer.
+
+			Now then...
+
+			@goto MAINBRANCH
+
+		@DONTACCEPTSOULS:
+			Chrona\ I refuse to.
+
+			Haugha\ Such insolence!
+
+			Why would you refuse the generous aid of these poor souls?
+
+			Are you certain?
+			Yes\REALLYDONTACCEPT
+			Actually, I will accept.\ACCEPTSOULS
+
+		@REALLYDONTACCEPT;
+			Chrona\ I am certain in my decision.
+
+			@setvar closeness disliked
+
+			Haugha\ I refuse to talk about this any further!
+
+			Disgusting!
+
+			(Haugha sighs and seems to calm down)
+
+			Now then...
+
+			@goto MAINBRANCH
+
+	@endif
+
+@endif
+
+// MAIN QUESTION BRANCH ------------------------------------------------
+@MAINBRANCH:
+Haugha¥ My daughter...
+What was I supposed to be doing?\TASK
+I must go now.¥END
+// external vars do not have to be initialized
+About this item..\VIOLET\varExt HaughaTalkedAboutViolet true
+
+@TASK:
+@if var task lorna
+
+	Haugha\ Your sister has been missing for a long time.
+
+	Ever since she ran away with her "love", as she calls it.
+
+	I urge you, find her. And bring her home.
+	Where can I find her?\WHERELO
+	I understand.\END
+
+	@WHERELO:
+	Haugha\ Last I heard, she was living with her "love" in the woods to the east of the chapel.
+
+	I would start there if I were you.
+
+	@goto MAINBRANCH
+
+@endif
+
+@goto MAINBRANCH
+
+@VIOLET:
+Chrona\ hi!
+
+@END:
+Haugha\ Then be off, my daughter!
+
+Time waits for no one! Also...
+
+Haugha\ Find me a seal bearer.\.08\normal\true
+
+@end
